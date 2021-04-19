@@ -7,5 +7,5 @@ Milk+ is a Fabric mod for Minecraft that adds new interactions with milk.
   - Milk bottles can be made by removing milk from a cauldron using glass bottles. Milk bottles remove 1 random status effect when drank.
   - Dyable items will be dyed white when used on a milk cauldron.
   
-![milk showcase](readme%20resources/cauldron_and_bottle.png)
-![cow in milk](readme%20resources/cow_in_milk.png)
+![milk showcase](readme_resources/cauldron_and_bottle.png)
+![cow in milk](readme_resources/cow_in_milk.png)
