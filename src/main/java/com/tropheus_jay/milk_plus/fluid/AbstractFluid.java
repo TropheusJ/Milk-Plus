@@ -26,7 +26,7 @@ public abstract class AbstractFluid extends FlowableFluid {
 		 */
 		@Override
 		protected boolean isInfinite() {
-			return false;
+			return true;
 		}
 		
 		/**
