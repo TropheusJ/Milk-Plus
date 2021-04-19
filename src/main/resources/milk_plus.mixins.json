@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.tropheus_jay.milk_plus.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CauldronBlockMixin",
+    "EntityMixin",
+    "GlassBottleItemMixin",
+    "ItemMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

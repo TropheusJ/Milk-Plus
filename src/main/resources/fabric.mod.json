@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "milk_plus",
+  "version": "${version}",
+  "name": "Milk+",
+  "description": "More interactions with milk!",
+  "authors": ["Tropheus Jay"],
+  "contact": {},
+  "license": "GPL-3.0",
+  "icon": "assets/milk_plus/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.tropheus_jay.milk_plus.MilkPlusClient"
+    ],
+    "main": [
+      "com.tropheus_jay.milk_plus.MilkPlus"
+    ]
+  },
+  "mixins": [
+    "milk_plus.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
