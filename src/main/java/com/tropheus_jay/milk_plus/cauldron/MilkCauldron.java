@@ -134,7 +134,7 @@ public class MilkCauldron extends CauldronBlock {
 					}
 					
 					if (level > 0 && item instanceof BannerItem) {
-						if (BannerBlockEntity.getPatternCount(heldStack) > 0 && !world.isClient) {
+						if (!world.isClient) {
 							newStack = new ItemStack(Blocks.WHITE_BANNER);
 							BannerBlockEntity.loadFromItemStack(newStack);
 							if (!player.abilities.creativeMode) {
