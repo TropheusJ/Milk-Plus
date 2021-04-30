@@ -21,6 +21,8 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import suitedllama.notenoughmilk.NotEnoughMilk;
 
+import java.util.HashMap;
+
 import static net.minecraft.item.Items.*;
 
 public class MilkPlus implements ModInitializer {
@@ -38,6 +40,8 @@ public class MilkPlus implements ModInitializer {
 	public static String[] NAMES = new String[56];
 	public static Item[] ITEMS = new Item[56];
 	public static int[] COLORS = new int[56];
+	public static NotEnoughMilkItemAccessor[] CLASSES = new NotEnoughMilkItemAccessor[56];
+	public static HashMap<NotEnoughMilkItemAccessor, Fluid> FLUIDS = new HashMap<NotEnoughMilkItemAccessor, Fluid>();
 	
 	@Override
 	public void onInitialize() {
@@ -53,7 +57,22 @@ public class MilkPlus implements ModInitializer {
 		// not enough milk compat
 		if (FabricLoader.INSTANCE.isModLoaded("notenoughmilk")) {
 			initializeCompatArrays();
+			for (int index = 0; index < 56; index++) {
+				CLASSES[index].refreshFluidReference();
+			}
 		}
+	}
+	
+	public static void addToClassList(NotEnoughMilkItemAccessor milkItem) {
+		int firstNullIndex = 0;
+		for (int index = 0; index < 56; index++) {
+			NotEnoughMilkItemAccessor currentClass = CLASSES[index];
+			if (currentClass == null) {
+				firstNullIndex = index;
+				break;
+			}
+		}
+		CLASSES[firstNullIndex] = milkItem;
 	}
 	
 	public static void initializeCompatArrays() {
@@ -133,6 +152,38 @@ public class MilkPlus implements ModInitializer {
 		COLORS[simplifyRepetitiveArrays()] = 0x1B1B1B; COLORS[simplifyRepetitiveArrays()] = 0x8E7965; COLORS[simplifyRepetitiveArrays()] = 0x618B43;
 		COLORS[simplifyRepetitiveArrays()] = 0x1C4E22; COLORS[simplifyRepetitiveArrays()] = 0x716547;
 		
+		resetArraySimplification();
+		
+		//help
+//		CLASSES[simplifyRepetitiveArrays()] = BatMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = BeeMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = BlazeMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = CatMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = CaveSpiderMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = ChickenMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = CreeperMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = DolphinMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = DonkeyMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = DrownedMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = ElderGuardianMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = EnderDragonMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = EndermanMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = EndermiteMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = EvokerMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = FishMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = FoxMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = GhastMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = GuardianMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = HoglinMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = HorseMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = IronGolemMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = LlamaMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = MagmaCubeMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = MooshroomMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = MuleMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = PandaMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = ParrotMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = PhantomMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = PiglinMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = PigMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = PillagerMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = PlayerMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = PolarBearMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = RabbitMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = RavagerMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = SheepMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = ShulkerMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = SilverfishMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = SkeletonMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = SlimeMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = SnowGolemMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = SpiderMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = SquidMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = StrayMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = StriderMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = TurtleMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = VexMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = VillagerMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = VindicatorMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = WitchMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = WitherMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = WitherSkeletonMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = WolfMilkItem.class;
+//		CLASSES[simplifyRepetitiveArrays()] = ZombieMilkItem.class; CLASSES[simplifyRepetitiveArrays()] = ZombifiedMilkItem.class;
+
 		for (int index = 0; index < 56; index++) {
 			STILL_FLUIDS[index] = new GenericFluid.Still();
 			FLOWING_FLUIDS[index] = new GenericFluid.Flowing();
@@ -147,6 +198,10 @@ public class MilkPlus implements ModInitializer {
 			STILL_FLUIDS[index] = Registry.register(Registry.FLUID, new Identifier(id, NAMES[index] + "_still"), STILL_FLUIDS[index]);
 			FLOWING_FLUIDS[index] = Registry.register(Registry.FLUID, new Identifier(id, NAMES[index] + "_flowing"), FLOWING_FLUIDS[index]);
 			FLUID_BLOCKS[index] = Registry.register(Registry.BLOCK, new Identifier(id, NAMES[index] + "_block"), FLUID_BLOCKS[index]);
+			
+			FLUIDS.put(CLASSES[index], STILL_FLUIDS[index]);
+			
+			
 		}
 	}
 
@@ -158,6 +213,10 @@ public class MilkPlus implements ModInitializer {
 	
 	public static void resetArraySimplification() {
 		timesCalled = -1;
+	}
+	
+	public static Fluid getFluidFromClass(NotEnoughMilkItemAccessor milkItem) {
+		return FLUIDS.get(milkItem);
 	}
 	
 }

@@ -8,8 +8,7 @@
     "EntityMixin",
     "GlassBottleItemMixin",
     "ItemMixin",
-    "not_enough_milk_compat.NotEnoughMilkItemMixin",
-    "not_enough_milk_compat.NotEnoughMilkMixin"
+    "not_enough_milk_compat.NotEnoughMilkItemMixin"
   ],
   "client": [
   ],
