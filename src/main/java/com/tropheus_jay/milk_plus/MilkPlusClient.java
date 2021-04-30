@@ -28,7 +28,10 @@ public class MilkPlusClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		setupFluidRendering(MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK, new Identifier("minecraft", "water"), 0xffffff);
 		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK);
-		
+		for (int index = 0; index < 56; index++) {
+			setupFluidRendering(MilkPlus.STILL_FLUIDS[index], MilkPlus.FLOWING_FLUIDS[index], new Identifier("minecraft", "water"), MilkPlus.COLORS[index]);
+			BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), MilkPlus.STILL_FLUIDS[index], MilkPlus.FLOWING_FLUIDS[index]);
+		}
 	}
 	public static void setupFluidRendering(final Fluid still, final Fluid flowing, final Identifier textureFluidId, final int color) {
 		final Identifier stillSpriteId = new Identifier(textureFluidId.getNamespace(), "block/" + textureFluidId.getPath() + "_still");
