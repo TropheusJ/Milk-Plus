@@ -13,7 +13,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
@@ -30,13 +29,12 @@ public class PlaceableMilkBucket extends BucketItem {
 	
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		HitResult hit = raycast(world, user, RaycastContext.FluidHandling.NONE);
-		if (hit instanceof BlockHitResult) {
-			BlockState targetState = world.getBlockState(((BlockHitResult) hit).getBlockPos());
-			if (targetState.getBlock() instanceof CauldronBlock) {
-				user.setStackInHand(hand, new ItemStack(BUCKET));
-				return TypedActionResult.success(this.getDefaultStack(), true);
-			}
+		BlockHitResult hit = raycast(world, user, RaycastContext.FluidHandling.NONE);
+		
+		BlockState targetState = world.getBlockState(hit.getBlockPos());
+		if (targetState.getBlock() instanceof CauldronBlock) {
+			user.setStackInHand(hand, new ItemStack(BUCKET));
+			return TypedActionResult.success(this.getDefaultStack(), true);
 		}
 		
 		shouldDrink = user.isSneaking();
