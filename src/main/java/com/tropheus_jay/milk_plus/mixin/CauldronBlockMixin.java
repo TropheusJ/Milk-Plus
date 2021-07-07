@@ -5,13 +5,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,9 +24,13 @@ import static net.minecraft.item.Items.MILK_BUCKET;
 
 @Mixin(CauldronBlock.class)
 public abstract class CauldronBlockMixin extends Block {
-	@Shadow @Final public static IntProperty LEVEL;
+	@Shadow
+	@Final
+	public static IntProperty LEVEL;
 	
-	private CauldronBlockMixin(Settings settings) {super(settings);}
+	private CauldronBlockMixin(Settings settings) {
+		super(settings);
+	}
 	
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;", shift = At.Shift.AFTER),
 			method = "Lnet/minecraft/block/CauldronBlock;onUse(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/util/ActionResult;", cancellable = true)

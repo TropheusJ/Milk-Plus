@@ -3,6 +3,9 @@ package com.tropheus_jay.milk_plus;
 import org.jetbrains.annotations.Contract;
 
 public final class MixinHelper {
+	private MixinHelper() {
+	}
+	
 	/**
 	 * A simple utility method that casts an object to a type.
 	 * <p>
@@ -18,6 +21,4 @@ public final class MixinHelper {
 	public static <T> T cast(Object in) {
 		return (T) in;
 	}
-
-	private MixinHelper() {}
 }

@@ -23,6 +23,7 @@ import static net.minecraft.item.Items.MILK_BUCKET;
 
 public class PlaceableMilkBucket extends BucketItem {
 	boolean shouldDrink;
+	
 	public PlaceableMilkBucket(Fluid fluid, Settings settings) {
 		super(fluid, settings);
 	}
@@ -55,12 +56,12 @@ public class PlaceableMilkBucket extends BucketItem {
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
 		if (shouldDrink) {
 			if (user instanceof ServerPlayerEntity) {
-				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)user;
+				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) user;
 				Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, stack);
 				serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
 			}
 			
-			if (user instanceof PlayerEntity && !((PlayerEntity)user).abilities.creativeMode) {
+			if (user instanceof PlayerEntity && !((PlayerEntity) user).abilities.creativeMode) {
 				stack.decrement(1);
 			}
 			
