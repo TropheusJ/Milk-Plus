@@ -8,7 +8,7 @@
     "Tropheus Jay"
   ],
   "contact": {},
-  "license": "GPL-3.0",
+  "license": "MIT",
   "icon": "assets/milk_plus/icon.png",
   "environment": "*",
   "entrypoints": {
