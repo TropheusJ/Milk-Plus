@@ -7,9 +7,7 @@
     "CauldronBlockMixin",
     "EntityMixin",
     "GlassBottleItemMixin",
-    "ItemMixin",
-    "not_enough_milk_compat.NotEnoughMilkItemMixin",
-    "not_enough_milk_compat.NotEnoughMilkMixin"
+    "ItemMixin"
   ],
   "client": [
   ],
