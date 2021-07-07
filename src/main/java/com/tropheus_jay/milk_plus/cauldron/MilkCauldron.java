@@ -1,191 +1,133 @@
 package com.tropheus_jay.milk_plus.cauldron;
 
 import com.tropheus_jay.milk_plus.MilkPlus;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.LeveledCauldronBlock;
+import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.block.entity.BannerBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 
-import java.util.HashMap;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static net.minecraft.item.Items.MILK_BUCKET;
-import static net.minecraft.item.Items.WATER_BUCKET;
-
 public class MilkCauldron extends LeveledCauldronBlock {
-	public static CauldronBehavior MILKIFY = (state, world, pos, player, hand, stack) -> {
-		world.setBlockState(pos, MilkPlus.MILK_CAULDRON.getDefaultState(), )
-		return null;
+	public static final Map<Item, CauldronBehavior> MILK_CAULDRON_BEHAVIOR = CauldronBehavior.createMap();
+	public static final CauldronBehavior FILL_FROM_BUCKET = (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(world, pos, player, hand, stack, MilkPlus.MILK_CAULDRON.getDefaultState().with(LEVEL, 3), SoundEvents.ITEM_BUCKET_EMPTY);
+	public static final CauldronBehavior FILL_FROM_BOTTLE = (state, world, pos, player, hand, stack) -> {
+		if (state.getBlock() == Blocks.CAULDRON || (state.get(LEVEL) != 3 && stack.getItem() == MilkPlus.MILK_BOTTLE)) {
+			if (!world.isClient) {
+				player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
+				player.incrementStat(Stats.USE_CAULDRON);
+				player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+				if (state.getBlock() == Blocks.CAULDRON) {
+					world.setBlockState(pos, MilkPlus.MILK_CAULDRON.getDefaultState().with(LEVEL, 1));
+				} else {
+					world.setBlockState(pos, state.cycle(LeveledCauldronBlock.LEVEL));
+				}
+				world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
+			}
+			return ActionResult.success(world.isClient);
+		}
+		return ActionResult.PASS;
+	};
+	public static final CauldronBehavior EMPTY_TO_BUCKET = (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(state, world, pos, player, hand, stack, new ItemStack(Items.MILK_BUCKET), statex -> statex.get(LEVEL) == 3, SoundEvents.ITEM_BUCKET_FILL);
+	public static final CauldronBehavior EMPTY_TO_BOTTLE = (state, world, pos, player, hand, stack) -> {
+		if (!world.isClient) {
+			Item item = stack.getItem();
+			player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(MilkPlus.MILK_BOTTLE)));
+			player.incrementStat(Stats.USE_CAULDRON);
+			player.incrementStat(Stats.USED.getOrCreateStat(item));
+			LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+			world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);
+		}
+		return ActionResult.success(world.isClient);
+	};
+	public static final CauldronBehavior MILKIFY_DYEABLE_ITEM = (state, world, pos, player, hand, stack) -> {
+		Item item = stack.getItem();
+		if ((item instanceof DyeableItem dyeableItem)) {
+			if (!world.isClient) {
+				dyeableItem.setColor(stack, 0xFFFFFF);
+				player.incrementStat(Stats.CLEAN_ARMOR);
+				LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+			}
+			return ActionResult.success(world.isClient);
+		}
+		return ActionResult.PASS;
+	};
+	public static final CauldronBehavior MILKIFY_SHULKER_BOX = (state, world, pos, player, hand, stack) -> {
+		Block block = Block.getBlockFromItem(stack.getItem());
+		if ((block instanceof ShulkerBoxBlock)) {
+			if (!world.isClient) {
+				ItemStack itemStack = new ItemStack(Blocks.WHITE_SHULKER_BOX);
+				if (stack.hasTag()) {
+					itemStack.setTag(stack.getTag().copy());
+				}
+				
+				player.setStackInHand(hand, itemStack);
+				player.incrementStat(Stats.CLEAN_SHULKER_BOX);
+				LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+			}
+			return ActionResult.success(world.isClient);
+		}
+		return ActionResult.PASS;
+	};
+	public static final CauldronBehavior MILKIFY_BANNER = (state, world, pos, player, hand, stack) -> {
+		if (!world.isClient()) {
+			ItemStack itemStack = new ItemStack(Items.WHITE_BANNER);
+			if (!player.getAbilities().creativeMode) {
+				stack.decrement(1);
+			}
+			
+			if (stack.isEmpty()) {
+				player.setStackInHand(hand, itemStack);
+			} else if (player.getInventory().insertStack(itemStack)) {
+				player.playerScreenHandler.syncState();
+			} else {
+				player.dropItem(itemStack, false);
+			}
+			
+			player.incrementStat(Stats.CLEAN_BANNER);
+			LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+		}
+		return ActionResult.success(world.isClient());
 	};
 	
 	public MilkCauldron(Settings settings) {
-		super(settings, (precipitation) -> false, ((Supplier<Map<Item, CauldronBehavior>>) (() -> {
-			Map<Item, CauldronBehavior> behaviors = new HashMap<>();
-			behaviors.put(MILK_BUCKET, (state, world, pos, player, hand, stack) -> {
+		super(settings, precipitation -> false, ((Supplier<Map<Item, CauldronBehavior>>) () -> {
+			// dyeables
+			for (Field field : Items.class.getDeclaredFields()) {
+				try {
+					Item item = (Item) field.get(null);
+					if (item instanceof DyeableItem) {
+						MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(item, MilkCauldron.MILKIFY_DYEABLE_ITEM);
+					} else if (item instanceof BannerItem) {
+						MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(item, MilkCauldron.MILKIFY_BANNER);
+					} else if (item instanceof BlockItem blockItem) {
+						if (blockItem.getBlock() instanceof ShulkerBoxBlock) {
+							MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(item, MilkCauldron.MILKIFY_SHULKER_BOX);
+						}
+					}
+				} catch (IllegalAccessException e) {
+					throw new RuntimeException(e);
+				}
+			}
 			
-			});
-			return behaviors;
-		})).get());
-		this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, 0));
-	}
-	
-	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
-		stateManager.add(LEVEL);
-	}
-	
-	
-	@Environment(EnvType.CLIENT)
-	@Override
-	public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
-		return new ItemStack(Blocks.CAULDRON);
-	}
-	
-	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		ItemStack heldStack = player.getStackInHand(hand);
-		if (heldStack.isEmpty()) {
-			return ActionResult.PASS;
-		} else {
-			int level = state.get(LEVEL);
-			Item item = heldStack.getItem();
-			if ((item == WATER_BUCKET || (item == Items.POTION && PotionUtil.getPotion(heldStack) == Potions.WATER)) && level == 0) {
-				world.setBlockState(pos, Blocks.CAULDRON.getDefaultState());
-				return ActionResult.SUCCESS;
-			}
-			if (item == Registry.ITEM.get(Registry.ITEM.getRawId(MILK_BUCKET))) {
-				if (level < 3 && !world.isClient) {
-					if (!player.abilities.creativeMode) {
-						player.setStackInHand(hand, new ItemStack(Items.BUCKET));
-					}
-					
-					player.incrementStat(Stats.FILL_CAULDRON);
-					this.setLevel(world, pos, state, 3);
-					world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				}
-				
-				return ActionResult.success(world.isClient);
-			} else if (item == Items.BUCKET) {
-				if (level == 3 && !world.isClient) {
-					if (!player.abilities.creativeMode) {
-						heldStack.decrement(1);
-						if (heldStack.isEmpty()) {
-							player.setStackInHand(hand, new ItemStack(Registry.ITEM.get(Registry.ITEM.getRawId(MILK_BUCKET))));
-						} else if (!player.inventory.insertStack(new ItemStack(Registry.ITEM.get(Registry.ITEM.getRawId(MILK_BUCKET))))) {
-							player.dropItem(new ItemStack(Registry.ITEM.get(Registry.ITEM.getRawId(MILK_BUCKET))), false);
-						}
-					}
-					
-					player.incrementStat(Stats.USE_CAULDRON);
-					this.setLevel(world, pos, state, 0);
-					world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				}
-				
-				return ActionResult.success(world.isClient);
-			} else {
-				ItemStack newStack;
-				if (item == Items.GLASS_BOTTLE) {
-					if (level > 0 && !world.isClient) {
-						if (!player.abilities.creativeMode) {
-							newStack = new ItemStack(MilkPlus.MILK_BOTTLE);
-							player.incrementStat(Stats.USE_CAULDRON);
-							heldStack.decrement(1);
-							if (heldStack.isEmpty()) {
-								player.setStackInHand(hand, newStack);
-							} else if (!player.inventory.insertStack(newStack)) {
-								player.dropItem(newStack, false);
-							} else if (player instanceof ServerPlayerEntity) {
-								((ServerPlayerEntity) player).refreshScreenHandler(player.playerScreenHandler);
-							}
-						}
-						
-						world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-						this.setLevel(world, pos, state, level - 1);
-					}
-					
-					return ActionResult.success(world.isClient);
-				} else if (item == MilkPlus.MILK_BOTTLE) {
-					if (level < 3 && !world.isClient) {
-						if (!player.abilities.creativeMode) {
-							newStack = new ItemStack(Items.GLASS_BOTTLE);
-							player.incrementStat(Stats.USE_CAULDRON);
-							player.setStackInHand(hand, newStack);
-							if (player instanceof ServerPlayerEntity) {
-								((ServerPlayerEntity) player).refreshScreenHandler(player.playerScreenHandler);
-							}
-						}
-						
-						world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-						this.setLevel(world, pos, state, level + 1);
-					}
-					
-					return ActionResult.success(world.isClient);
-				} else {
-					if (level > 0 && item instanceof DyeableItem) {
-						DyeableItem dyeableItem = (DyeableItem) item;
-						if (!world.isClient) {
-							dyeableItem.setColor(heldStack, 0xffffff);
-							this.setLevel(world, pos, state, level - 1);
-							return ActionResult.SUCCESS;
-						}
-					}
-					
-					if (level > 0 && item instanceof BannerItem) {
-						if (!world.isClient) {
-							newStack = new ItemStack(Blocks.WHITE_BANNER);
-							BannerBlockEntity.loadFromItemStack(newStack);
-							if (!player.abilities.creativeMode) {
-								heldStack.decrement(1);
-								this.setLevel(world, pos, state, level - 1);
-							}
-							
-							if (heldStack.isEmpty()) {
-								player.setStackInHand(hand, newStack);
-							} else if (!player.inventory.insertStack(newStack)) {
-								player.dropItem(newStack, false);
-							} else if (player instanceof ServerPlayerEntity) {
-								((ServerPlayerEntity) player).refreshScreenHandler(player.playerScreenHandler);
-							}
-						}
-						
-						return ActionResult.success(world.isClient);
-					} else if (level > 0 && item instanceof BlockItem) {
-						Block block = ((BlockItem) item).getBlock();
-						if (block instanceof ShulkerBoxBlock && !world.isClient()) {
-							ItemStack newShulkerStack = new ItemStack(Blocks.WHITE_SHULKER_BOX, 1);
-							if (heldStack.hasTag()) {
-								newShulkerStack.setTag(heldStack.getTag().copy());
-							}
-							
-							player.setStackInHand(hand, newShulkerStack);
-							this.setLevel(world, pos, state, level - 1);
-							return ActionResult.SUCCESS;
-						} else {
-							return ActionResult.CONSUME;
-						}
-					} else {
-						return ActionResult.PASS;
-					}
-				}
-			}
-		}
+			MILK_CAULDRON_BEHAVIOR.put(Items.MILK_BUCKET, FILL_FROM_BUCKET);
+			MILK_CAULDRON_BEHAVIOR.put(MilkPlus.MILK_BOTTLE, FILL_FROM_BOTTLE);
+			
+			MILK_CAULDRON_BEHAVIOR.put(Items.BUCKET, EMPTY_TO_BUCKET);
+			MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, EMPTY_TO_BOTTLE);
+			
+			return MILK_CAULDRON_BEHAVIOR;
+		}).get());
 	}
 }

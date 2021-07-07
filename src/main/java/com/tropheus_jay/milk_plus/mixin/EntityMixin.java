@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-	@Inject(method = "Lnet/minecraft/entity/Entity;updateMovementInFluid(Lnet/minecraft/tag/Tag;D)Z",
-			at = @At("HEAD"))
+	@Inject(method = "updateMovementInFluid(Lnet/minecraft/tag/Tag;D)Z", at = @At("HEAD"))
 	public void updateMovementInFluid(Tag<Fluid> tag, double d, CallbackInfoReturnable<Boolean> cir) {
 		if (MixinHelper.cast(this) instanceof PlayerEntity) {
 			FluidState fluidState = MixinHelper.<Entity>cast(this).world.getFluidState(MixinHelper.<Entity>cast(this).getBlockPos());

@@ -2,9 +2,8 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.tropheus_jay.milk_plus.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "CauldronBlockMixin",
     "EntityMixin",
     "GlassBottleItemMixin",
     "ItemsMixin"

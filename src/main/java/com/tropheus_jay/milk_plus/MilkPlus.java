@@ -8,9 +8,11 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
+import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -27,9 +29,16 @@ public class MilkPlus implements ModInitializer {
 	public void onInitialize() {
 		STILL_MILK = Registry.register(Registry.FLUID, new Identifier("milk_plus", "milk"), new MilkFluid.Still());
 		FLOWING_MILK = Registry.register(Registry.FLUID, new Identifier("milk_plus", "flowing_milk"), new MilkFluid.Flowing());
-		MILK = Registry.register(Registry.BLOCK, new Identifier("milk_plus", "milk_block"), new FluidBlock(STILL_MILK, FabricBlockSettings.copy(Blocks.WATER)) {
-		});
-		MILK_CAULDRON = Registry.register(Registry.BLOCK, new Identifier("milk_plus", "milk_cauldron"), new MilkCauldron(FabricBlockSettings.copy(Blocks.CAULDRON)));
-		MILK_BOTTLE = Registry.register(Registry.ITEM, new Identifier("milk_plus", "milk_bottle"), new MilkBottle(new Item.Settings().recipeRemainder(GLASS_BOTTLE).maxCount(1).group(ItemGroup.MISC)));
+		MILK = Registry.register(Registry.BLOCK, new Identifier("milk_plus", "milk_block"),
+				new FluidBlock(STILL_MILK, FabricBlockSettings.copy(Blocks.WATER)) {
+				});
+		MILK_BOTTLE = Registry.register(Registry.ITEM, new Identifier("milk_plus", "milk_bottle"),
+				new MilkBottle(new Item.Settings().recipeRemainder(GLASS_BOTTLE).maxCount(1).group(ItemGroup.MISC)));
+		
+		CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(Items.MILK_BUCKET, MilkCauldron.FILL_FROM_BUCKET);
+		CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
+		
+		MILK_CAULDRON = Registry.register(Registry.BLOCK, new Identifier("milk_plus", "milk_cauldron"),
+				new MilkCauldron(FabricBlockSettings.copy(Blocks.CAULDRON)));
 	}
 }
