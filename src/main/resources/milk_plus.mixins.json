@@ -7,7 +7,7 @@
     "CauldronBlockMixin",
     "EntityMixin",
     "GlassBottleItemMixin",
-    "ItemMixin"
+    "ItemsMixin"
   ],
   "client": [
   ],
