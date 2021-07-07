@@ -20,15 +20,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GlassBottleItem.class)
 public abstract class GlassBottleItemMixin extends Item {
-	@Shadow protected abstract ItemStack fill(ItemStack itemStack, PlayerEntity playerEntity, ItemStack itemStack2);
+	private GlassBottleItemMixin(Settings settings) {
+		super(settings);
+	}
 	
-	private GlassBottleItemMixin(Settings settings) { super(settings); }
+	@Shadow
+	protected abstract ItemStack fill(ItemStack itemStack, PlayerEntity playerEntity, ItemStack itemStack2);
 	
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V",
 			ordinal = 1, shift = At.Shift.AFTER), method = "Lnet/minecraft/item/GlassBottleItem;use(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/TypedActionResult;", cancellable = true)
 	public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
 		HitResult hitResult = Item.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
-		BlockPos blockPos = ((BlockHitResult)hitResult).getBlockPos();
+		BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
 		if (world.getFluidState(blockPos).getFluid() == MilkPlus.STILL_MILK || world.getFluidState(blockPos).getFluid() == MilkPlus.FLOWING_MILK) {
 			cir.setReturnValue(TypedActionResult.success(fill(user.getStackInHand(hand), user, new ItemStack(MilkPlus.MILK_BOTTLE))));
 		}

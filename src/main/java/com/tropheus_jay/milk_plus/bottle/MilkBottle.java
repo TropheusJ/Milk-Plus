@@ -19,13 +19,15 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class MilkBottle extends Item {
-	public MilkBottle(Settings settings) {super(settings);}
+	public MilkBottle(Settings settings) {
+		super(settings);
+	}
 	
 	@Override
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
 		super.finishUsing(stack, world, user);
 		if (user instanceof ServerPlayerEntity) {
-			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)user;
+			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) user;
 			Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, stack);
 		}
 		
@@ -41,10 +43,10 @@ public class MilkBottle extends Item {
 		if (stack.isEmpty()) {
 			return new ItemStack(Items.GLASS_BOTTLE);
 		} else {
-			if (user instanceof PlayerEntity && !((PlayerEntity)user).abilities.creativeMode) {
+			if (user instanceof PlayerEntity && !((PlayerEntity) user).getAbilities().creativeMode) {
 				ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
-				PlayerEntity playerEntity = (PlayerEntity)user;
-				if (!playerEntity.inventory.insertStack(itemStack)) {
+				PlayerEntity playerEntity = (PlayerEntity) user;
+				if (!playerEntity.getInventory().insertStack(itemStack)) {
 					playerEntity.dropItem(itemStack, false);
 				}
 			}

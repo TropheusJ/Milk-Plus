@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "Milk+",
   "description": "Milk, but better!",
-  "authors": ["Tropheus Jay"],
+  "authors": [
+    "Tropheus Jay"
+  ],
   "contact": {},
   "license": "GPL-3.0",
   "icon": "assets/milk_plus/icon.png",

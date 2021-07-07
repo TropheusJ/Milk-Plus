@@ -24,12 +24,6 @@ import java.util.function.Function;
 
 public class MilkPlusClient implements ClientModInitializer {
 	
-	@Override
-	public void onInitializeClient() {
-		setupFluidRendering(MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK, new Identifier("minecraft", "water"), 0xffffff);
-		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK);
-		
-	}
 	public static void setupFluidRendering(final Fluid still, final Fluid flowing, final Identifier textureFluidId, final int color) {
 		final Identifier stillSpriteId = new Identifier(textureFluidId.getNamespace(), "block/" + textureFluidId.getPath() + "_still");
 		final Identifier flowingSpriteId = new Identifier(textureFluidId.getNamespace(), "block/" + textureFluidId.getPath() + "_flow");
@@ -43,7 +37,7 @@ public class MilkPlusClient implements ClientModInitializer {
 		final Identifier fluidId = Registry.FLUID.getId(still);
 		final Identifier listenerId = new Identifier(fluidId.getNamespace(), fluidId.getPath() + "_reload_listener");
 		
-		final Sprite[] fluidSprites = { null, null };
+		final Sprite[] fluidSprites = {null, null};
 		
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
@@ -55,7 +49,7 @@ public class MilkPlusClient implements ClientModInitializer {
 			 * Get the sprites from the block atlas when resources are reloaded
 			 */
 			@Override
-			public void apply(ResourceManager resourceManager) {
+			public void reload(ResourceManager resourceManager) {
 				final Function<Identifier, Sprite> atlas = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
 				fluidSprites[0] = atlas.apply(stillSpriteId);
 				fluidSprites[1] = atlas.apply(flowingSpriteId);
@@ -63,8 +57,7 @@ public class MilkPlusClient implements ClientModInitializer {
 		});
 		
 		// The FluidRenderer gets the sprites and color from a FluidRenderHandler during rendering
-		final FluidRenderHandler renderHandler = new FluidRenderHandler()
-		{
+		final FluidRenderHandler renderHandler = new FluidRenderHandler() {
 			@Override
 			public Sprite[] getFluidSprites(BlockRenderView view, BlockPos pos, FluidState state) {
 				return fluidSprites;
@@ -78,5 +71,12 @@ public class MilkPlusClient implements ClientModInitializer {
 		
 		FluidRenderHandlerRegistry.INSTANCE.register(still, renderHandler);
 		FluidRenderHandlerRegistry.INSTANCE.register(flowing, renderHandler);
+	}
+	
+	@Override
+	public void onInitializeClient() {
+		setupFluidRendering(MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK, new Identifier("minecraft", "water"), 0xffffff);
+		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK);
+		
 	}
 }

@@ -2,7 +2,6 @@ package com.tropheus_jay.milk_plus.mixin;
 
 import com.tropheus_jay.milk_plus.MilkPlus;
 import com.tropheus_jay.milk_plus.MixinHelper;
-import com.tropheus_jay.milk_plus.bottle.MilkBottle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;

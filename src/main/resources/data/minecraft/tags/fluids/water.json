@@ -1,7 +1,6 @@
 {
   "replace": false,
-  "values":
-  [
+  "values": [
     "milk_plus:milk",
     "milk_plus:flowing_milk"
   ]
