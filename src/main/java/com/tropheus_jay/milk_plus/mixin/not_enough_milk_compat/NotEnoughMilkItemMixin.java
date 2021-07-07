@@ -1,12 +1,12 @@
 package com.tropheus_jay.milk_plus.mixin.not_enough_milk_compat;
 
 import com.tropheus_jay.milk_plus.MilkPlus;
-import com.tropheus_jay.milk_plus.NotEnoughMilkItemAccessor;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
@@ -14,6 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.tag.FluidTags;
@@ -25,14 +26,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import suitedllama.notenoughmilk.milks.*;
+
+import java.util.HashMap;
 
 @Pseudo
 @Mixin(value = {BatMilkItem.class, BeeMilkItem.class, BlazeMilkItem.class, CatMilkItem.class, CaveSpiderMilkItem.class,
@@ -47,26 +50,15 @@ import suitedllama.notenoughmilk.milks.*;
 		StrayMilkItem.class, StriderMilkItem.class, TurtleMilkItem.class, VexMilkItem.class, VillagerMilkItem.class,
 		VindicatorMilkItem.class, WitchMilkItem.class, WitherMilkItem.class, WitherSkeletonMilkItem.class,
 		WolfMilkItem.class, ZombieMilkItem.class, ZombifiedMilkItem.class}, remap = false)
-public abstract class NotEnoughMilkItemMixin extends Item implements NotEnoughMilkItemAccessor {
+public abstract class NotEnoughMilkItemMixin extends Item {
 	public NotEnoughMilkItemMixin(Settings settings) {
 		super(settings);
 	}
 	
 	Fluid fluid;
 	
-	@Inject(at = @At("TAIL"), method = "<init>")
-	public void NotEnoughMilkItem(Settings settings, CallbackInfo ci) {
-		MilkPlus.addToClassList(this);
-	}
-	
-	@Override
-	public void refreshFluidReference() {
-		fluid = MilkPlus.getFluidFromClass(this);
-	}
-	
 	@Inject(at = @At("HEAD"), method = "use(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/TypedActionResult;", cancellable = true)
 	public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-		refreshFluidReference();
 		if (user.isSneaking()) {
 			cir.setReturnValue(ItemUsage.consumeHeldItem(world, user, hand));
 		} else {
@@ -87,7 +79,7 @@ public abstract class NotEnoughMilkItemMixin extends Item implements NotEnoughMi
 			if (!world.canPlayerModifyAt(user, hitPos) && user.canPlaceOn(offsetPos, direction, heldStack)) {
 				return TypedActionResult.fail(heldStack);
 			}
-			if (placeFluid(user, world, offsetPos, blockHitResult)) {
+			if (this.placeFluid(user, world, offsetPos, blockHitResult)) {
 				if (user instanceof ServerPlayerEntity) {
 					Criteria.PLACED_BLOCK.trigger((ServerPlayerEntity)user, offsetPos, heldStack);
 				}
