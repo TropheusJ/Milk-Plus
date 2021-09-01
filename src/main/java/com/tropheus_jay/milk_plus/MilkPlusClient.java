@@ -75,7 +75,7 @@ public class MilkPlusClient implements ClientModInitializer {
 	
 	@Override
 	public void onInitializeClient() {
-		setupFluidRendering(MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK, new Identifier("minecraft", "water"), 0xffffff);
+		setupFluidRendering(MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK, new Identifier("milk_plus", "milk"), 0xffffff);
 		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK);
 		
 	}
