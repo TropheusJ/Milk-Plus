@@ -4,9 +4,11 @@
   "package": "com.tropheus_jay.milk_plus.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BucketItemMixin",
     "EntityMixin",
     "GlassBottleItemMixin",
-    "ItemsMixin"
+    "ItemsMixin",
+    "PlayerEntityMixin"
   ],
   "client": [
   ],

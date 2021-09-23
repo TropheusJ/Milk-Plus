@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
@@ -30,8 +31,7 @@ public class MilkPlus implements ModInitializer {
 		STILL_MILK = Registry.register(Registry.FLUID, new Identifier("milk_plus", "milk"), new MilkFluid.Still());
 		FLOWING_MILK = Registry.register(Registry.FLUID, new Identifier("milk_plus", "flowing_milk"), new MilkFluid.Flowing());
 		MILK = Registry.register(Registry.BLOCK, new Identifier("milk_plus", "milk_block"),
-				new FluidBlock(STILL_MILK, FabricBlockSettings.copy(Blocks.WATER)) {
-				});
+				new FluidBlock(STILL_MILK, FabricBlockSettings.copy(Blocks.WATER).mapColor(MapColor.WHITE)) {});
 		MILK_BOTTLE = Registry.register(Registry.ITEM, new Identifier("milk_plus", "milk_bottle"),
 				new MilkBottle(new Item.Settings().recipeRemainder(GLASS_BOTTLE).maxCount(1).group(ItemGroup.MISC)));
 		

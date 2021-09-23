@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.WorldView;
 
 import static com.tropheus_jay.milk_plus.MilkPlus.*;
 import static net.minecraft.item.Items.MILK_BUCKET;
@@ -25,6 +26,11 @@ public abstract class MilkFluid extends AbstractFluid {
 	@Override
 	public Item getBucketItem() {
 		return Registry.ITEM.get(Registry.ITEM.getRawId(MILK_BUCKET));
+	}
+
+	@Override
+	protected int getFlowSpeed(WorldView worldView) {
+		return 2;
 	}
 	
 	@Override
