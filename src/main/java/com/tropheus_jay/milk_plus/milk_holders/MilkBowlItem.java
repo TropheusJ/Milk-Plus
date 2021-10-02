@@ -1,6 +1,7 @@
 package com.tropheus_jay.milk_plus.milk_holders;
 
 import com.tropheus_jay.milk_plus.MilkPlus;
+import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.MilkBottle;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,9 +47,7 @@ public class MilkBowlItem extends MushroomStewItem {
 	@Override
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
 		ItemStack result = super.finishUsing(stack, world, user);
-		if (user.getStatusEffects().size() > 0) {
-			user.clearStatusEffects();
-		}
+		MilkBottle.tryRemoveRandomEffect(user);
 		return result;
 	}
 }

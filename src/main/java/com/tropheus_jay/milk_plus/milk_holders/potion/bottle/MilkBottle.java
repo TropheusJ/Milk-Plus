@@ -30,10 +30,8 @@ public class MilkBottle extends Item {
 			Criteria.CONSUME_ITEM.trigger(player, stack);
 		}
 
-		if (!world.isClient && user.getStatusEffects().size() != 0) {
-			int indexOfEffectToRemove = world.random.nextInt(user.getStatusEffects().size());
-			StatusEffectInstance effectToRemove = (StatusEffectInstance) user.getStatusEffects().toArray()[indexOfEffectToRemove];
-			user.removeStatusEffect(effectToRemove.getEffectType());
+		if (!world.isClient) {
+			tryRemoveRandomEffect(user);
 		}
 
 		if (playerEntity != null) {
@@ -85,5 +83,13 @@ public class MilkBottle extends Item {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		return ItemUsage.consumeHeldItem(world, user, hand);
+	}
+	
+	public static void tryRemoveRandomEffect(LivingEntity user) {
+		if (user.getStatusEffects().size() > 0) {
+			int indexOfEffectToRemove = user.world.random.nextInt(user.getStatusEffects().size());
+			StatusEffectInstance effectToRemove = (StatusEffectInstance) user.getStatusEffects().toArray()[indexOfEffectToRemove];
+			user.removeStatusEffect(effectToRemove.getEffectType());
+		}
 	}
 }

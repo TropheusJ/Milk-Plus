@@ -2,6 +2,7 @@ package com.tropheus_jay.milk_plus.milk_holders;
 
 import com.tropheus_jay.milk_plus.MilkPlus;
 import com.tropheus_jay.milk_plus.fluid.MilkFluid;
+import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.MilkBottle;
 import net.minecraft.block.*;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.entity.Entity;
@@ -204,12 +205,12 @@ public class MilkCauldron extends LeveledCauldronBlock {
 				shouldDrain = true;
 			}
 			
-			if (entity instanceof LivingEntity livingEntity && livingEntity.getStatusEffects().size() > 0) {
-				livingEntity.clearStatusEffects();
+			if (entity instanceof LivingEntity livingEntity) {
+				MilkBottle.tryRemoveRandomEffect(livingEntity);
 				shouldDrain = true;
 			}
 			
-			if (entity.canModifyAt(world, pos) && shouldDrain) {
+			if (shouldDrain && entity.canModifyAt(world, pos)) {
 				decrementFluidLevel(state, world, pos);
 			}
 		}

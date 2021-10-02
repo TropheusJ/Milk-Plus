@@ -31,8 +31,11 @@ public abstract class CowEntityMixin extends AnimalEntity {
 			ItemStack itemStack2 = ItemUsage.exchangeStack(itemStack, player, MilkPlus.MILK_BOWL.getDefaultStack());
 			player.setStackInHand(hand, itemStack2);
 			cir.setReturnValue(ActionResult.success(this.world.isClient));
-		} else {
-			cir.setReturnValue(super.interactMob(player, hand));
+		} else if (itemStack.isOf(Items.GLASS_BOTTLE) && !isBaby()) {
+			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+			ItemStack itemStack2 = ItemUsage.exchangeStack(itemStack, player, MilkPlus.MILK_BOTTLE.getDefaultStack());
+			player.setStackInHand(hand, itemStack2);
+			cir.setReturnValue(ActionResult.success(this.world.isClient));
 		}
 	}
 }
