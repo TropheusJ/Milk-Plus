@@ -2,6 +2,7 @@ package com.tropheus_jay.milk_plus;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
@@ -10,11 +11,11 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -22,14 +23,15 @@ import net.minecraft.world.BlockRenderView;
 
 import java.util.function.Function;
 
+import static com.tropheus_jay.milk_plus.MilkPlus.*;
+
 public class MilkPlusClient implements ClientModInitializer {
-	
 	public static void setupFluidRendering(final Fluid still, final Fluid flowing, final Identifier textureFluidId, final int color) {
 		final Identifier stillSpriteId = new Identifier(textureFluidId.getNamespace(), "block/" + textureFluidId.getPath() + "_still");
 		final Identifier flowingSpriteId = new Identifier(textureFluidId.getNamespace(), "block/" + textureFluidId.getPath() + "_flow");
 		
 		// If they're not already present, add the sprites to the block atlas
-		ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) -> {
+		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) -> {
 			registry.register(stillSpriteId);
 			registry.register(flowingSpriteId);
 		});
@@ -50,7 +52,7 @@ public class MilkPlusClient implements ClientModInitializer {
 			 */
 			@Override
 			public void reload(ResourceManager resourceManager) {
-				final Function<Identifier, Sprite> atlas = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+				final Function<Identifier, Sprite> atlas = MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 				fluidSprites[0] = atlas.apply(stillSpriteId);
 				fluidSprites[1] = atlas.apply(flowingSpriteId);
 			}
@@ -75,8 +77,7 @@ public class MilkPlusClient implements ClientModInitializer {
 	
 	@Override
 	public void onInitializeClient() {
-		setupFluidRendering(MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK, new Identifier("milk_plus", "milk"), 0xffffff);
+		setupFluidRendering(MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK, MilkPlus.id("milk"), 0xFFFFFF);
 		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), MilkPlus.STILL_MILK, MilkPlus.FLOWING_MILK);
-		
 	}
 }

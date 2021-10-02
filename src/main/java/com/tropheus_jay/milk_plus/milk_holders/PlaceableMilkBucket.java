@@ -1,4 +1,4 @@
-package com.tropheus_jay.milk_plus.bucket;
+package com.tropheus_jay.milk_plus.milk_holders;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.CauldronBlock;
@@ -86,7 +86,7 @@ public class PlaceableMilkBucket extends BucketItem {
 
 	@Override
 	public ItemStack getDefaultStack() {
-		return new ItemStack(Registry.ITEM.get(Registry.ITEM.getRawId(MILK_BUCKET)));
+		return new ItemStack(MILK_BUCKET);
 	}
 
 	@Override

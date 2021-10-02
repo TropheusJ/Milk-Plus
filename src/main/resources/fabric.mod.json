@@ -21,6 +21,7 @@
   "mixins": [
     "milk_plus.mixins.json"
   ],
+  "accessWidener": "milk_plus.accesswidener",
   "depends": {
     "fabricloader": ">=0.11.3",
     "fabric": "*",

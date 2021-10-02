@@ -4,13 +4,19 @@
   "package": "com.tropheus_jay.milk_plus.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "ArrowEntityMixin",
+    "BrewingRecipeRegistryAccessor",
+    "BrewingRecipeRegistryMixin",
+    "BrewingStandScreenHandlerPotionSlotMixin",
     "BucketItemMixin",
+    "CowEntityMixin",
     "EntityMixin",
     "GlassBottleItemMixin",
     "ItemsMixin",
-    "PlayerEntityMixin"
+    "PotionEntityMixin"
   ],
   "client": [
+    "FluidRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

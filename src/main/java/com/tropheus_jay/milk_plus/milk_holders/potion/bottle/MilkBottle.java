@@ -1,4 +1,4 @@
-package com.tropheus_jay.milk_plus.bottle;
+package com.tropheus_jay.milk_plus.milk_holders.potion.bottle;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
@@ -18,8 +18,6 @@ import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-import java.util.Random;
-
 public class MilkBottle extends Item {
 	public MilkBottle(Settings settings) {
 		super(settings);
@@ -33,7 +31,7 @@ public class MilkBottle extends Item {
 		}
 
 		if (!world.isClient && user.getStatusEffects().size() != 0) {
-			int indexOfEffectToRemove = new Random().nextInt(user.getStatusEffects().size());
+			int indexOfEffectToRemove = world.random.nextInt(user.getStatusEffects().size());
 			StatusEffectInstance effectToRemove = (StatusEffectInstance) user.getStatusEffects().toArray()[indexOfEffectToRemove];
 			user.removeStatusEffect(effectToRemove.getEffectType());
 		}

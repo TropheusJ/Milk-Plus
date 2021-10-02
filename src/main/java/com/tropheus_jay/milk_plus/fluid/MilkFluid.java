@@ -1,18 +1,30 @@
 package com.tropheus_jay.milk_plus.fluid;
 
+import io.github.tropheusj.dripstone_fluid_lib.DripstoneInteractingFluid;
+import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CauldronBlock;
+import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 import static com.tropheus_jay.milk_plus.MilkPlus.*;
 import static net.minecraft.item.Items.MILK_BUCKET;
 
-public abstract class MilkFluid extends AbstractFluid {
+public abstract class MilkFluid extends AbstractFluid implements DripstoneInteractingFluid {
 	@Override
 	public Fluid getStill() {
 		return STILL_MILK;
@@ -35,8 +47,37 @@ public abstract class MilkFluid extends AbstractFluid {
 	
 	@Override
 	protected BlockState toBlockState(FluidState fluidState) {
-		// method_15741 converts the LEVEL_1_8 of the fluid state to the LEVEL_15 the fluid block uses
 		return MILK.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
+	}
+	
+	@Override
+	public Optional<SoundEvent> getBucketFillSound() {
+		return Optional.of(SoundEvents.ITEM_BUCKET_FILL);
+	}
+	
+	@Override
+	public int getParticleColor(World world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+		return 0xFFFFFF;
+	}
+	
+	@Override
+	public boolean growsDripstone(BlockState state) {
+		return true;
+	}
+	
+	@Override
+	public int getFluidDripWorldEvent(BlockState state, World world, BlockPos cauldronPos) {
+		return WorldEvents.POINTED_DRIPSTONE_DRIPS_WATER_INTO_CAULDRON;
+	}
+	
+	@Override
+	public @Nullable BlockState getCauldronBlockState(BlockState state, World world, BlockPos cauldronPos) {
+		return MILK_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL, 1);
+	}
+	
+	@Override
+	public float getFluidDripChance(BlockState state, World world, BlockPos pos) {
+		return WATER_DRIP_CHANCE;
 	}
 	
 	public static class Flowing extends MilkFluid {
