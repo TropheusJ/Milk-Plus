@@ -11,6 +11,7 @@ Milk+ is a Fabric mod for Minecraft that adds new interactions with milk.
   - Dyable items will be dyed white when used on a milk cauldron.
 - Milk tipped arrows. Lingering milk bottle surrounded by arrows, or use arrows on a milk cauldron.
 
+Milk demonstration: https://youtu.be/bZMMxfK0Fu8
 
 ![milk showcase](readme_resources/cauldron_and_bottle.png)
 ![cow in milk](readme_resources/cow_in_milk.png)
