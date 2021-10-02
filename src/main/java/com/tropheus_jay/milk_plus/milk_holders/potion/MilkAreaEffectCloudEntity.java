@@ -1,5 +1,6 @@
 package com.tropheus_jay.milk_plus.milk_holders.potion;
 
+import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.MilkBottle;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleEffect;
@@ -88,8 +89,8 @@ public class MilkAreaEffectCloudEntity extends AreaEffectCloudEntity {
 			
 			if (this.age % 5 == 0) {
 				world.getOtherEntities(this, getBoundingBox().expand(2)).forEach(entity -> {
-					if (entity instanceof LivingEntity livingEntity && livingEntity.getStatusEffects().size() > 0) {
-						livingEntity.clearStatusEffects();
+					if (entity instanceof LivingEntity livingEntity) {
+						MilkBottle.tryRemoveRandomEffect(livingEntity);
 					}
 				});
 			}
