@@ -1,9 +1,7 @@
 package com.tropheus_jay.milk_plus.fluid;
 
 import io.github.tropheusj.dripstone_fluid_lib.DripstoneInteractingFluid;
-import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;

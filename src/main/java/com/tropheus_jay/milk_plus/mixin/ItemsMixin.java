@@ -1,7 +1,7 @@
 package com.tropheus_jay.milk_plus.mixin;
 
-import com.tropheus_jay.milk_plus.milk_holders.PlaceableMilkBucket;
 import com.tropheus_jay.milk_plus.fluid.MilkFluid;
+import com.tropheus_jay.milk_plus.milk_holders.PlaceableMilkBucket;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;

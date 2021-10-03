@@ -1,9 +1,13 @@
 package com.tropheus_jay.milk_plus.mixin;
 
-import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.LingeringMilkBottle;
 import com.tropheus_jay.milk_plus.milk_holders.potion.MilkAreaEffectCloudEntity;
+import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.LingeringMilkBottle;
+import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.MilkBottle;
 import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.PotionItemEntityExtensions;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.FlyingItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
@@ -93,9 +97,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 					if (livingEntity.isAffectedBySplashPotions()) {
 						double d = this.squaredDistanceTo(livingEntity);
 						if (d < 16.0) {
-							if (livingEntity.getStatusEffects().size() > 0) {
-								livingEntity.clearStatusEffects();
-							}
+							MilkBottle.tryRemoveRandomEffect(livingEntity);
 						}
 					}
 				}

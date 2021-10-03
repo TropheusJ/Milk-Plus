@@ -3,15 +3,14 @@ package com.tropheus_jay.milk_plus.mixin;
 import com.tropheus_jay.milk_plus.fluid.MilkFluid;
 import com.tropheus_jay.milk_plus.milk_holders.potion.arrow.ArrowEntityExtensions;
 import com.tropheus_jay.milk_plus.milk_holders.potion.arrow.MilkTippedArrowItem;
+import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.MilkBottle;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,8 +41,8 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 	
 	@Inject(at = @At("HEAD"), method = "onHit")
 	protected void onHit(LivingEntity target, CallbackInfo ci) {
-		if (isMilk() && target.getStatusEffects().size() > 0) {
-			target.clearStatusEffects();
+		if (isMilk()) {
+			MilkBottle.tryRemoveRandomEffect(target);
 		}
 	}
 	
