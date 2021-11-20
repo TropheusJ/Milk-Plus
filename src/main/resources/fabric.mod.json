@@ -12,10 +12,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.tropheus_jay.milk_plus.MilkPlusClient"
+      "io.github.tropheusj.MilkPlusClient"
     ],
     "main": [
-      "com.tropheus_jay.milk_plus.MilkPlus"
+      "io.github.tropheusj.MilkPlus"
     ]
   },
   "mixins": [
@@ -23,8 +23,8 @@
   ],
   "accessWidener": "milk_plus.accesswidener",
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.5",
     "fabric": "*",
-    "minecraft": ">=1.17"
+    "minecraft": ">1.17"
   }
 }

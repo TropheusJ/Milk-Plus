@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.tropheus_jay.milk_plus.mixin",
+  "package": "io.github.tropheusj.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "ArrowEntityMixin",
