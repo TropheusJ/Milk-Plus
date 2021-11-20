@@ -99,9 +99,7 @@ public class MilkPlus implements ModInitializer {
 				new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 		);
 		// empty
-//		FluidStorage.combinedItemApiProvider(BUCKET).register(context ->
-//				new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BUCKET), STILL_MILK, FluidConstants.BUCKET)
-//		);
+		// bottle and bucket not needed, already registered
 		FluidStorage.combinedItemApiProvider(BOWL).register(context ->
 				new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BOWL), STILL_MILK, FluidConstants.BOTTLE)
 		);
