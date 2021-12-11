@@ -1,9 +1,10 @@
 package io.github.tropheusj.mixin;
 
-import io.github.tropheusj.fluid.MilkFluid;
+import io.github.tropheusj.milk.Milk;
+import io.github.tropheusj.milk.MilkFluid;
+import io.github.tropheusj.milk.potion.bottle.MilkBottle;
 import io.github.tropheusj.milk_holders.potion.arrow.ArrowEntityExtensions;
 import io.github.tropheusj.milk_holders.potion.arrow.MilkTippedArrowItem;
-import io.github.tropheusj.milk_holders.potion.bottle.MilkBottle;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -42,7 +43,7 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 	@Inject(at = @At("HEAD"), method = "onHit")
 	protected void onHit(LivingEntity target, CallbackInfo ci) {
 		if (isMilk()) {
-			MilkBottle.tryRemoveRandomEffect(target);
+			Milk.tryRemoveRandomEffect(target);
 		}
 	}
 	

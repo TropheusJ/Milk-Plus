@@ -1,8 +1,8 @@
 package io.github.tropheusj;
 
-import com.tropheus_jay.milk_plus.milk_holders.MilkBowlItem;
-import com.tropheus_jay.milk_plus.milk_holders.potion.arrow.MilkTippedArrowItem;
 import io.github.tropheusj.milk.Milk;
+import io.github.tropheusj.milk_holders.MilkBowlItem;
+import io.github.tropheusj.milk_holders.potion.arrow.MilkTippedArrowItem;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;

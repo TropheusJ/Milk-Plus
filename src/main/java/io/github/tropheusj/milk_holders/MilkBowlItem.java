@@ -1,7 +1,8 @@
 package io.github.tropheusj.milk_holders;
 
 import io.github.tropheusj.MilkPlus;
-import io.github.tropheusj.milk_holders.potion.bottle.MilkBottle;
+import io.github.tropheusj.milk.Milk;
+import io.github.tropheusj.milk.potion.bottle.MilkBottle;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +35,7 @@ public class MilkBowlItem extends StewItem {
 			BlockPos pos = hit.getBlockPos();
 			if (world.getBlockState(pos).isOf(Blocks.CAULDRON)) {
 				user.setStackInHand(hand, ItemUsage.exchangeStack(user.getStackInHand(hand), user, new ItemStack(MilkPlus.MILK_BOWL)));
-				world.setBlockState(pos, MilkPlus.MILK_CAULDRON.getDefaultState().with(LEVEL, 1));
+				world.setBlockState(pos, Milk.MILK_CAULDRON.getDefaultState().with(LEVEL, 1));
 				world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
 				return TypedActionResult.success(Items.BOWL.getDefaultStack(), true);
@@ -47,7 +48,7 @@ public class MilkBowlItem extends StewItem {
 	@Override
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
 		ItemStack result = super.finishUsing(stack, world, user);
-		MilkBottle.tryRemoveRandomEffect(user);
+		Milk.tryRemoveRandomEffect(user);
 		return result;
 	}
 }
