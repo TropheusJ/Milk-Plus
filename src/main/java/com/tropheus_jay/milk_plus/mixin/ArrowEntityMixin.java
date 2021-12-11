@@ -1,9 +1,9 @@
 package com.tropheus_jay.milk_plus.mixin;
 
-import com.tropheus_jay.milk_plus.fluid.MilkFluid;
 import com.tropheus_jay.milk_plus.milk_holders.potion.arrow.ArrowEntityExtensions;
 import com.tropheus_jay.milk_plus.milk_holders.potion.arrow.MilkTippedArrowItem;
-import com.tropheus_jay.milk_plus.milk_holders.potion.bottle.MilkBottle;
+import io.github.tropheusj.milk.Milk;
+import io.github.tropheusj.milk.MilkFluid;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -21,15 +21,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArrowEntity.class)
 public abstract class ArrowEntityMixin extends PersistentProjectileEntity implements ArrowEntityExtensions {
+	@Unique
+	private boolean milk = false;
+	
 	protected ArrowEntityMixin(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
 		super(entityType, world);
 	}
 	
 	@Shadow
 	protected abstract void setColor(int color);
-	
-	@Unique
-	private boolean milk = false;
 	
 	@Inject(at = @At("HEAD"), method = "initFromStack")
 	public void initFromStack(ItemStack stack, CallbackInfo ci) {
@@ -42,7 +42,7 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 	@Inject(at = @At("HEAD"), method = "onHit")
 	protected void onHit(LivingEntity target, CallbackInfo ci) {
 		if (isMilk()) {
-			MilkBottle.tryRemoveRandomEffect(target);
+			Milk.tryRemoveRandomEffect(target);
 		}
 	}
 	
@@ -70,12 +70,12 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 	}
 	
 	@Override
-	public void setMilk(boolean value) {
-		milk = value;
+	public boolean isMilk() {
+		return milk;
 	}
 	
 	@Override
-	public boolean isMilk() {
-		return milk;
+	public void setMilk(boolean value) {
+		milk = value;
 	}
 }

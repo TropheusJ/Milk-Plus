@@ -1,20 +1,20 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        "###",
-        "#G#",
-        "###"
-    ],
-    "key": {
-        "#": {
-            "item": "minecraft:arrow"
-        },
-        "G": {
-            "item": "milk_plus:lingering_milk_bottle"
-        }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#G#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:arrow"
     },
-    "result": {
-        "item": "milk_plus:milk_arrow",
-        "count": 8
+    "G": {
+      "item": "milk:lingering_milk_bottle"
     }
+  },
+  "result": {
+    "item": "milk_plus:milk_arrow",
+    "count": 8
+  }
 }

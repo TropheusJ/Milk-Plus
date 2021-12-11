@@ -11,9 +11,6 @@
   "icon": "assets/milk_plus/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "com.tropheus_jay.milk_plus.MilkPlusClient"
-    ],
     "main": [
       "com.tropheus_jay.milk_plus.MilkPlus"
     ]
@@ -21,10 +18,9 @@
   "mixins": [
     "milk_plus.mixins.json"
   ],
-  "accessWidener": "milk_plus.accesswidener",
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.11",
     "fabric": "*",
-    "minecraft": ">=1.17"
+    "minecraft": "1.17.1"
   }
 }
