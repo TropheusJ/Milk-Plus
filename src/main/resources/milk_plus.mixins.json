@@ -5,18 +5,7 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "ArrowEntityMixin",
-    "BrewingRecipeRegistryAccessor",
-    "BrewingRecipeRegistryMixin",
-    "BrewingStandScreenHandlerPotionSlotMixin",
-    "BucketItemMixin",
-    "CowEntityMixin",
-    "EntityMixin",
-    "GlassBottleItemMixin",
-    "ItemsMixin",
-    "PotionEntityMixin"
-  ],
-  "client": [
-    "FluidRendererMixin"
+    "CowEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

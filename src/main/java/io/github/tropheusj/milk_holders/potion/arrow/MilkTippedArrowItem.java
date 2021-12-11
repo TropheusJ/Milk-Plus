@@ -15,7 +15,7 @@ public class MilkTippedArrowItem extends TippedArrowItem {
 	public MilkTippedArrowItem(Settings settings) {
 		super(settings);
 	}
-
+	
 	@Override
 	public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
 		if (this.isIn(group)) {
