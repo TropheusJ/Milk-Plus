@@ -33,7 +33,7 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 	private boolean milk = false;
 	
 	@Inject(at = @At("HEAD"), method = "initFromStack")
-	public void initFromStack(ItemStack stack, CallbackInfo ci) {
+	public void milk_plus$initFromStack(ItemStack stack, CallbackInfo ci) {
 		if (stack.getItem() instanceof MilkTippedArrowItem) {
 			setMilk(true);
 			setColor(0xFFFFFF);
@@ -41,14 +41,14 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 	}
 	
 	@Inject(at = @At("HEAD"), method = "onHit")
-	protected void onHit(LivingEntity target, CallbackInfo ci) {
+	protected void milk_plus$onHit(LivingEntity target, CallbackInfo ci) {
 		if (isMilk()) {
 			Milk.tryRemoveRandomEffect(target);
 		}
 	}
 	
 	@Inject(at = @At("HEAD"), method = "tick")
-	public void tick(CallbackInfo ci) {
+	public void milk_plus$tick(CallbackInfo ci) {
 		if (!isMilk()) {
 			Direction directionToCheck = getHorizontalFacing();
 			for (int i = 0; i <= 3; i++) {
@@ -61,12 +61,12 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 	}
 	
 	@Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
-	public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
+	public void milk_plus$writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
 		nbt.putBoolean("Milk", isMilk());
 	}
 	
 	@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
-	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+	public void milk_plus$readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
 		setMilk(nbt.getBoolean("Milk"));
 	}
 	

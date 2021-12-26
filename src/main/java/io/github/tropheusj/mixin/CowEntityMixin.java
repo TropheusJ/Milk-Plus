@@ -24,7 +24,7 @@ public abstract class CowEntityMixin extends AnimalEntity {
 	}
 	
 	@Inject(at = @At("HEAD"), method = "interactMob", cancellable = true)
-	public void interactMob(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
+	public void milk_plus$interactMob(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
 		ItemStack itemStack = player.getStackInHand(hand);
 		if (itemStack.isOf(Items.BOWL) && !isBaby()) {
 			player.playSound(SoundEvents.ENTITY_MOOSHROOM_MILK, 1.0F, 1.0F);
