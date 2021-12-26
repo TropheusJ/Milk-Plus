@@ -41,7 +41,8 @@ public class MilkPlus implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		Milk.enableMilkFluids();
+		Milk.enableMilkPlacing();
+		Milk.enableMilkFluid();
 		Milk.enableAllMilkBottles();
 		Milk.enableCauldron();
 		MILK_ARROW = Registry.register(Registry.ITEM, id("milk_arrow"),
