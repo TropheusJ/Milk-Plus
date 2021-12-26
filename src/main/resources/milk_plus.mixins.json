@@ -7,9 +7,6 @@
     "ArrowEntityMixin",
     "CowEntityMixin"
   ],
-  "client": [
-    "BackgroundRendererMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }
