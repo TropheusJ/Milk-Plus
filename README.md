@@ -13,5 +13,4 @@ Milk+ is a Fabric mod for Minecraft that adds new interactions with milk.
 
 Milk demonstration: https://youtu.be/bZMMxfK0Fu8
 
-![milk showcase](readme_resources/cauldron_and_bottle.png)
-![cow in milk](readme_resources/cow_in_milk.png)
+![milk showcase](readme_resources/items.png)
