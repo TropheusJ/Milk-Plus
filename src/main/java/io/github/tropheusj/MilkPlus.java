@@ -41,14 +41,14 @@ public class MilkPlus implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		Milk.enableMilkPlacing();
 		Milk.enableMilkFluid();
+		Milk.enableMilkPlacing();
 		Milk.enableAllMilkBottles();
 		Milk.enableCauldron();
 		MILK_ARROW = Registry.register(Registry.ITEM, id("milk_arrow"),
-				new MilkTippedArrowItem((new FabricItemSettings()).group(ItemGroup.COMBAT)));
+				new MilkTippedArrowItem((new FabricItemSettings().group(ItemGroup.COMBAT))));
 		MILK_BOWL = Registry.register(Registry.ITEM, id("milk_bowl"),
-				new MilkBowlItem((new FabricItemSettings()).maxCount(1).group(ItemGroup.FOOD).food(FoodComponents.MUSHROOM_STEW)));
+				new MilkBowlItem(new FabricItemSettings().maxCount(1).group(ItemGroup.FOOD).food(new FoodComponent.Builder().alwaysEdible().build())));
 		
 		MilkCauldron.addInputToCauldronExchange(MILK_BOWL.getDefaultStack(), BOWL.getDefaultStack(), true);
 		MilkCauldron.addOutputToItemExchange(BOWL.getDefaultStack(), MILK_BOWL.getDefaultStack(), true);

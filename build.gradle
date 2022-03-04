@@ -1,7 +1,9 @@
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GroovyAccessibility
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'fabric-loom' version '0.11-SNAPSHOT'
     id 'maven-publish'
-    id 'io.github.juuxel.loom-quiltflower-mini' version '1.+'
+    id 'io.github.juuxel.loom-quiltflower' version '1.+'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -12,12 +14,9 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    maven {
-        url = "https://maven.devos.community/releases/"
-    }
-    maven {
-        url = "https://maven.devos.community/snapshots/"
-    }
+    maven { url = "https://maven.devos.community/releases/" }
+    maven { url = "https://maven.devos.community/snapshots/" }
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 dependencies {
@@ -25,22 +24,41 @@ dependencies {
     mappings("net.fabricmc:yarn:${rootProject.minecraft_version}+build.${rootProject.mappings_version}:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    modImplementation(include("io.github.tropheusj:dripstone_fluid_lib:${project.dripstone_fluid_lib_version}"))
-    modImplementation(include("io.github.tropheusj:milk-lib:${project.milk_lib_version}"))
+    modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
+    modApi(include("io.github.tropheusj:milk-lib:${project.milk_lib_version}"))
+//    modRuntimeOnly("maven.modrinth:lazydfu:0.1.2")
 }
 
+task buildOrPublish {
+    group = "build"
+    String mavenUser = System.getenv().MAVEN_USER
+    if (mavenUser != null && !mavenUser.isEmpty()) {
+        dependsOn(tasks.getByName("publish"))
+        println "prepared for publish"
+    } else {
+        dependsOn(tasks.getByName("build"))
+        println "prepared for build"
+    }
+}
+
+
 processResources {
-    inputs.property "version", project.version
+    Map<String, String> properties = new HashMap<>()
+    properties.put("version", project.version)
+    properties.put("loader_version", project.loader_version)
+    properties.put("fabric_version", project.fabric_version)
+    properties.put("minecraft_version", project.minecraft_version)
+    properties.put("java_version", sourceCompatibility)
+
+    properties.forEach((k, v) -> inputs.property(k, v))
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand properties
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-
-    it.options.release = 17
+    it.options.release = Integer.parseInt(sourceCompatibility)
 }
 
 java {
@@ -56,20 +74,20 @@ jar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            from components.java
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        maven {
+            url = "https://maven.devos.community/${System.getenv().PUBLISH_SUFFIX}/"
+            credentials {
+                username = System.getenv().MAVEN_USER
+                password = System.getenv().MAVEN_PASS
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
     }
 }
