@@ -26,7 +26,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
     modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
     modApi(include("io.github.tropheusj:milk-lib:${project.milk_lib_version}"))
-//    modRuntimeOnly("maven.modrinth:lazydfu:0.1.2")
+//    modRuntimeOnly("maven.modrinth:lazydfu:0.1.2") // maven machine broke
 }
 
 task buildOrPublish {
