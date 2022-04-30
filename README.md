@@ -1,5 +1,5 @@
 # Milk+
-Milk+ is a Fabric mod for Minecraft that adds new interactions with milk.
+Milk+ is a Fabric/Quilt mod for Minecraft that adds new interactions with milk.
 <h1 align="center">
 	<a href="https://github.com/TropheusJ/Milk-Plus/blob/1.18/LICENSE"><img 
         src="https://img.shields.io/github/license/TropheusJ/Milk-Plus?style=flat&color=900c3f" 
