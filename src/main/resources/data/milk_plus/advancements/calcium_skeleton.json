@@ -1,5 +1,4 @@
 {
-  "parent": "minecraft:nether/summon_wither",
   "display": {
     "icon": {
       "item": "milk_plus:milk_arrow"
