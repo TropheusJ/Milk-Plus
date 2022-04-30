@@ -1,7 +1,7 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection GroovyAccessibility
 plugins {
-    id 'fabric-loom' version '0.11-SNAPSHOT'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
     id 'io.github.juuxel.loom-quiltflower' version '1.+'
 }
@@ -14,8 +14,8 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    maven { url = "https://maven.devos.community/releases/" }
-    maven { url = "https://maven.devos.community/snapshots/" }
+    maven { url = "https://mvn.devos.one/releases/" }
+    maven { url = "https://mvn.devos.one/snapshots/" }
     maven { url = "https://api.modrinth.com/maven" }
 }
 
@@ -26,7 +26,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
     modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
     modApi(include("io.github.tropheusj:milk-lib:${project.milk_lib_version}"))
-//    modRuntimeOnly("maven.modrinth:lazydfu:0.1.2") // maven machine broke
+    modRuntimeOnly("maven.modrinth:lazydfu:0.1.2")
 }
 
 task buildOrPublish {
@@ -80,7 +80,7 @@ publishing {
 
     repositories {
         maven {
-            url = "https://maven.devos.community/${System.getenv().PUBLISH_SUFFIX}/"
+            url = "https://mvn.devos.one/${System.getenv().PUBLISH_SUFFIX}/"
             credentials {
                 username = System.getenv().MAVEN_USER
                 password = System.getenv().MAVEN_PASS

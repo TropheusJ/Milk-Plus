@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:nether/summon_wither",
+  "display": {
+    "icon": {
+      "item": "milk_plus:milk_arrow"
+    },
+    "title": {
+      "translate": "advancements.milk_plus.calcium_skeleton.title"
+    },
+    "description": {
+      "translate": "advancements.milk_plus.calcium_skeleton.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "calcium": {
+      "trigger": "milk_plus:calcium_skeleton"
+    }
+  }
+}
