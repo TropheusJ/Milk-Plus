@@ -5,7 +5,7 @@ Milk+ is a Fabric mod for Minecraft that adds new interactions with milk.
         src="https://img.shields.io/github/license/TropheusJ/Milk-Plus?style=flat&color=900c3f" 
         alt="License"
     ></a>
-	<a href="https://www.curseforge.com/minecraft/mc-mods/milk_plus"><img 
+	<a href="https://www.curseforge.com/minecraft/mc-mods/milk-plus"><img 
         src="https://cf.way2muchnoise.eu/473632.svg" 
         alt="Downloads"
     ></a><br>
@@ -22,6 +22,7 @@ Milk+ is a Fabric mod for Minecraft that adds new interactions with milk.
 </h1>
 
 # Features
+![milk showcase](readme_resources/items.png)
 - Milk buckets can be placed. They will be placed when looking at a block and not crouching, otherwise they will be drank.
 - Standing in fluid milk removes all status effects as if you drank it.
 - Fluid milk will grow dripstone, and dripstone with milk above it will fill cauldrons.
@@ -35,6 +36,8 @@ Milk+ is a Fabric mod for Minecraft that adds new interactions with milk.
   - Or shoot arrows through fluid milk!
 - Milk soup. Does the same thing as a milk bottle. Milk bottle + bowl.
 
-Milk demonstration: https://youtu.be/bZMMxfK0Fu8
+Milk demonstration: https://youtu.be/m5A8n1gZaew
 
-![milk showcase](readme_resources/items.png)
+Download:
+- https://www.curseforge.com/minecraft/mc-mods/milk-plus
+- https://modrinth.com/mod/milk_plus
