@@ -57,7 +57,7 @@ public class MilkPlus implements ModInitializer {
 	public static Item MILK_BOWL;
 
 	// entities which will be healed by milk arrows.
-	public static final TagKey<EntityType<?>> SKELETONS = TagKey.of(Registry.ENTITY_TYPE_KEY, id("skeletons"));
+	public static final TagKey<EntityType<?>> SKELETONS = TagKey.of(Registry.ENTITY_TYPE_KEY, new Identifier("c", "skeletons"));
 
 	public static final CalciumSkeletonCriterion CALCIUM_SKELETON_CRITERION = CriterionRegistry.register(new CalciumSkeletonCriterion());
 	
