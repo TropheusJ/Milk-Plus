@@ -31,4 +31,9 @@ public class MilkTippedArrowItem extends TippedArrowItem {
 	public String getTranslationKey(ItemStack stack) {
 		return getTranslationKey();
 	}
+
+	@Override
+	public ItemStack getDefaultStack() {
+		return new ItemStack(this);
+	}
 }
