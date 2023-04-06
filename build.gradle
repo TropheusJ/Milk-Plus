@@ -2,10 +2,9 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GradlePackageVersionRange
 plugins {
-    id "fabric-loom" version "0.12-SNAPSHOT"
+    id "fabric-loom" version "1.0.+"
     id "io.github.juuxel.loom-quiltflower" version "1.+" // Quiltflower, a better decompiler
     id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
-    id "org.ajoberstar.grgit" version "4.1.1"
     id "maven-publish"
 }
 
@@ -18,6 +17,8 @@ group = project.maven_group
 ext.buildNumber = System.getenv("GITHUB_RUN_NUMBER")
 String patch = buildNumber != null ? buildNumber : "99999"
 version = project.mod_version.replace("<build>", patch)
+
+Project milkLib = getParent().findProject("milk-lib")
 
 repositories {
     maven { url = "https://mvn.devos.one/snapshots/" }
@@ -46,8 +47,19 @@ dependencies {
 
     // dependencies
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
-    modApi(include("io.github.tropheusj:milk-lib:${project.milk_lib_version}"))
+
+    if (milkLib == null)
+        modApi(include("io.github.tropheusj:milk-lib:${project.milk_lib_version}"))
+}
+
+sourceSets {
+    if (milkLib != null) {
+        main {
+            def main = milkLib.sourceSets.main
+            compileClasspath += main.compileClasspath + main.output
+            runtimeClasspath += main.runtimeClasspath + main.output
+        }
+    }
 }
 
 task buildOrPublish {
