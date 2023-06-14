@@ -16,14 +16,12 @@ import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -32,11 +30,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.rmi.server.Skeleton;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Mixin(ArrowEntity.class)
 public abstract class ArrowEntityMixin extends PersistentProjectileEntity implements ArrowEntityExtensions {
@@ -80,7 +76,7 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 			if (skeleton) {
 				// give skeletons as many effects as possible
 				// Calcium: It's Good For Your Bones™
-				for (StatusEffect effect : Registry.STATUS_EFFECT) {
+				for (StatusEffect effect : Registries.STATUS_EFFECT) {
 					if (MilkPlus.arrowShouldApplyEffect(target, effect)) {
 						if (effect.isInstant()) {
 							effect.applyInstantEffect(null, null, target, 1, 1);
@@ -93,7 +89,7 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 				}
 				if (getOwner() instanceof ServerPlayerEntity player) {
 					MilkPlus.CALCIUM_SKELETON_CRITERION.trigger(player);
-					world.playSound(null, getX(), getY(), getZ(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.HOSTILE, 1, 1);
+					getWorld().playSound(null, getX(), getY(), getZ(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.HOSTILE, 1, 1);
 				}
 			}
 		}
@@ -104,7 +100,7 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity implem
 		if (!isMilk()) {
 			Direction directionToCheck = getHorizontalFacing();
 			for (int i = 0; i <= 3; i++) {
-				if (world.getFluidState(getBlockPos().offset(directionToCheck, i)).getFluid() instanceof MilkFluid) {
+				if (getWorld().getFluidState(getBlockPos().offset(directionToCheck, i)).getFluid() instanceof MilkFluid) {
 					setMilk(true);
 					setColor(0xFFFFFF);
 				}

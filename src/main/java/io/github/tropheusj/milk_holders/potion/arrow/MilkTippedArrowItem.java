@@ -15,14 +15,7 @@ public class MilkTippedArrowItem extends TippedArrowItem {
 	public MilkTippedArrowItem(Settings settings) {
 		super(settings);
 	}
-	
-	@Override
-	public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-		if (this.isIn(group)) {
-			stacks.add(new ItemStack(this));
-		}
-	}
-	
+
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 	}

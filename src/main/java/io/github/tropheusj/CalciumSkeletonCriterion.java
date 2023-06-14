@@ -5,7 +5,7 @@ import io.github.tropheusj.CalciumSkeletonCriterion.Conditions;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
-import net.minecraft.predicate.entity.EntityPredicate.Extended;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -13,7 +13,7 @@ public class CalciumSkeletonCriterion extends AbstractCriterion<Conditions> {
 	public static final Identifier ID = MilkPlus.id("calcium_skeleton");
 
 	@Override
-	protected Conditions conditionsFromJson(JsonObject obj, Extended playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+	protected Conditions conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
 		return new Conditions();
 	}
 
@@ -28,7 +28,7 @@ public class CalciumSkeletonCriterion extends AbstractCriterion<Conditions> {
 
 	public static class Conditions extends AbstractCriterionConditions {
 		public Conditions() {
-			super(ID, Extended.EMPTY);
+			super(ID, LootContextPredicate.EMPTY);
 		}
 	}
 }

@@ -1,11 +1,7 @@
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyAccessibility
-//file:noinspection GradlePackageVersionRange
 plugins {
-    id "fabric-loom" version "0.12-SNAPSHOT"
+    id "fabric-loom" version "1.1.+"
     id "io.github.juuxel.loom-quiltflower" version "1.+" // Quiltflower, a better decompiler
     id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
-    id "org.ajoberstar.grgit" version "4.1.1"
     id "maven-publish"
 }
 
@@ -15,7 +11,7 @@ targetCompatibility = JavaVersion.VERSION_17
 archivesBaseName = project.archives_base_name
 group = project.maven_group
 
-ext.buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
 String patch = buildNumber != null ? buildNumber : "99999"
 version = project.mod_version.replace("<build>", patch)
 
@@ -33,16 +29,9 @@ dependencies {
     mappings("net.fabricmc:yarn:${rootProject.minecraft_version}+build.${rootProject.mappings_version}:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 
-    modLocalRuntime("maven.modrinth:lazydfu:0.1.2")
     modLocalRuntime("maven.modrinth:suggestion-tweaker:${project.suggestion_tweaker_version}")
-    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") { exclude(group: "net.fabricmc.fabric-api") }
-    modLocalRuntime("mcp.mobius.waila:wthit:fabric-${project.wthit_version}")
-    modLocalRuntime("maven.modrinth:badpackets:fabric-${project.bad_packets_version}")
-    modLocalRuntime("maven.modrinth:sodium:${project.sodium_version}") // rendering beware
-    localRuntime("org.joml:joml:1.10.4")
-    modLocalRuntime("maven.modrinth:lithium:${project.lithium_version}")
-    modLocalRuntime("maven.modrinth:iris:${project.iris_version}")
-    modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}") { exclude group: "net.fabricmc"; exclude group: "net.fabricmc.fabric-api" }
+    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}")
+    modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
 
     // dependencies
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
@@ -50,26 +39,26 @@ dependencies {
     modApi(include("io.github.tropheusj:milk-lib:${project.milk_lib_version}"))
 }
 
-task buildOrPublish {
+tasks.register("buildOrPublish") {
     group = "build"
-    String mavenUser = System.getenv().MAVEN_USER
+    String mavenUser = System.getenv("MAVEN_USER")
     if (mavenUser != null && !mavenUser.isEmpty()) {
-        dependsOn(tasks.getByName("publish"))
+        dependsOn(tasks.named("publish"))
         println "prepared for publish"
     } else {
-        dependsOn(tasks.getByName("build"))
+        dependsOn(tasks.named("build"))
         println "prepared for build"
     }
 }
 
 
 processResources {
-    Map<String, String> properties = new HashMap<>()
-    properties.put("version", project.version)
-    properties.put("loader_version", project.loader_version)
-    properties.put("fabric_version", project.fabric_version)
-    properties.put("minecraft_version", project.minecraft_version)
-    properties.put("java_version", sourceCompatibility)
+    Map<String, Object> properties = [
+        "version": version,
+        "loader_version": loader_version,
+        "fabric_version": fabric_version,
+        "minecraft_version": minecraft_version
+    ]
 
     properties.forEach((k, v) -> inputs.property(k, v))
 
@@ -79,7 +68,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = Integer.parseInt(sourceCompatibility)
+    it.options.release.set(17)
 }
 
 java {
