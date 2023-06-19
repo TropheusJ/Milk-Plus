@@ -111,7 +111,7 @@ modrinth {
     versionNumber = version
     versionName = "Milk+ " + version
     versionType = "release"
-    changelog = getChangelog()
+    changelog = readChangelog()
     uploadFile = file("build/libs/${remapJar.archiveBaseName.get()}-${version}.jar")
     gameVersions = compatible_minecraft_versions.split(",").toList()
     loaders = [ "fabric", "quilt" ]
@@ -120,7 +120,7 @@ modrinth {
     }
 }
 
-String getChangelog() {
+String readChangelog() {
     String text = Files.readString(project.file("CHANGELOG.txt").toPath())
     String[] split = text.split("----------")
     if (split.length != 2)
