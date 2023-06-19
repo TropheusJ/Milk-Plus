@@ -1,8 +1,11 @@
+import java.nio.file.Files
+
 plugins {
     id "fabric-loom" version "1.1.+"
     id "io.github.juuxel.loom-quiltflower" version "1.+" // Quiltflower, a better decompiler
     id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
     id "maven-publish"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -100,4 +103,27 @@ publishing {
             }
         }
     }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "OCxj9VC8"
+    versionNumber = version
+    versionName = "Milk+ " + version
+    versionType = "release"
+    changelog = getChangelog()
+    uploadFile = file("build/libs/${remapJar.archiveBaseName.get()}-${version}.jar")
+    gameVersions = compatible_minecraft_versions.split(",").toList()
+    loaders = [ "fabric", "quilt" ]
+    dependencies {
+        required.project("fabric-api")
+    }
+}
+
+String getChangelog() {
+    String text = Files.readString(project.file("CHANGELOG.txt").toPath())
+    String[] split = text.split("----------")
+    if (split.length != 2)
+        throw new IllegalStateException("Malformed changelog")
+    return split[1].trim()
 }
