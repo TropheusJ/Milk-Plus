@@ -16,6 +16,7 @@ jobs:
       PUBLISH_SUFFIX: snapshots
       MAVEN_USER: ${{ secrets.MAVEN_USER }}
       MAVEN_PASS: ${{ secrets.MAVEN_PASS }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
     steps:
 
       - name: checkout repository
